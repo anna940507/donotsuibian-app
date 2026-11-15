@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Don't 隨便 App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@500;700;900&family=Nunito:wght@700;900&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F8FB;--grid:transparent;--card:#FFFFFF;--ink:#3E4959;--line:#3E4959;--bd:rgba(62,73,89,.28);--sky:#CFDDEE;--blue:#8FB8DE;--brand:#5B8DBE;--mute:#7A8697;--ok:#4C8C6B;--hl:#E6F0FA;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1F2630;--grid:transparent;--card:#28313D;--ink:#E6ECF4;--line:#0F141B;--bd:rgba(150,170,195,.3);--sky:#3F5878;--blue:#7FB0E0;--brand:#8FB8DE;--mute:#9AA7B8;--hl:#2E4560}}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Nunito","Chiron GoRound TC","Noto Sans TC",system-ui,sans-serif;font-weight:500;display:flex;justify-content:center}
+#app{width:100%;max-width:430px;height:100%;display:flex;flex-direction:column;background-color:var(--bg);background-image:linear-gradient(var(--grid) 2px,transparent 2px),linear-gradient(90deg,var(--grid) 2px,transparent 2px);background-size:44px 44px}
+header{display:flex;align-items:center;gap:10px;padding:14px 18px 8px}
+header b{font-weight:900;font-size:19px;letter-spacing:.5px}
+header b i{font-style:normal;color:var(--brand)}
+.back{width:36px;height:36px;border:2.5px solid var(--line);border-radius:50%;background:var(--sky);font-weight:900;color:var(--ink);font-size:16px;box-shadow:2px 2px 0 var(--line);cursor:pointer}
+.prog{display:flex;gap:6px;padding:0 18px 6px}
+.prog span{flex:1;height:8px;border:2px solid var(--line);border-radius:8px;background:var(--card)}
+.prog span.on{background:var(--ink)}
+main{flex:1;overflow-y:auto;padding:8px 18px 20px}
+h1{font-size:26px;font-weight:900;line-height:1.25;margin:6px 0 4px}
+h2{font-size:17px;font-weight:900;margin:18px 0 8px}
+p.sub{color:var(--mute);font-size:14px;line-height:1.5}
+.card{background:var(--card);border:2.5px solid var(--line);border-radius:16px;padding:14px;box-shadow:4px 4px 0 var(--line);margin:12px 0}
+.btn{display:block;width:100%;padding:15px;border:2.5px solid var(--line);border-radius:14px;background:var(--ink);color:var(--bg);font:900 17px "Noto Sans TC",sans-serif;box-shadow:4px 4px 0 var(--line);cursor:pointer;margin-top:16px}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--line)}
+.btn.alt{background:var(--sky);color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:9px 14px;border:2.5px solid var(--line);border-radius:30px;background:var(--card);font:700 14px "Noto Sans TC",sans-serif;color:var(--ink);cursor:pointer}
+.chip.on{background:var(--sky);box-shadow:2px 2px 0 var(--line)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.step{display:flex;align-items:center;gap:12px}
+.step button{width:40px;height:40px;border:2.5px solid var(--line);border-radius:12px;background:var(--sky);font:900 20px sans-serif;color:var(--ink);cursor:pointer}
+.big{font-size:30px;font-weight:900;min-width:60px;text-align:center}
+input[type=range]{width:100%;accent-color:var(--ink);height:28px}
+.bar{height:14px;border:2px solid var(--line);border-radius:8px;background:var(--bg);overflow:hidden;margin-top:5px}
+.bar i{display:block;height:100%;background:var(--blue);width:0;transition:width .4s}
+.tag{display:inline-block;padding:3px 10px;border:2px solid var(--line);border-radius:20px;font-size:12px;font-weight:900;background:var(--hl)}
+.tl{border-left:3px dashed var(--ink);margin:8px 0 0 8px;padding-left:14px;font-size:14px;line-height:1.5}
+.tl div{margin-bottom:6px;position:relative}
+.tl div:before{content:"";position:absolute;left:-23px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--blue);border:2px solid var(--line)}
+.opt{cursor:pointer}
+.opt.sel{background:var(--sky)}
+.v{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:2.5px solid var(--line);border-radius:12px;margin-top:8px;background:var(--card);cursor:pointer;font-size:14px}
+.v.sel{background:var(--sky);box-shadow:2px 2px 0 var(--line)}
+.v small{color:var(--mute);display:block;font-size:12px}
+.spin{width:64px;height:64px;border:6px solid var(--sky);border-top-color:var(--ink);border-radius:50%;animation:s 1s linear infinite;margin:0 auto 16px}
+@keyframes s{to{transform:rotate(360deg)}}
+.center{text-align:center;padding-top:80px}
+.save{background:var(--hl);border:2.5px solid var(--line);border-radius:14px;padding:12px;font-weight:900;text-align:center;margin-top:12px}
+.stk{display:inline-flex;width:84px;height:84px;border:3px solid var(--line);border-radius:50%;background:var(--ok);color:#fff;font-size:44px;align-items:center;justify-content:center;box-shadow:4px 4px 0 var(--line)}
+.av{display:inline-flex;width:30px;height:30px;border-radius:50%;border:2px solid var(--line);background:var(--sky);align-items:center;justify-content:center;font-size:12px;font-weight:900;margin-right:-6px}
+.inp{width:100%;padding:10px 12px;border:2.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:500 15px "Noto Sans TC",sans-serif;margin-top:10px}
+.tm{width:110px;margin:0;font-weight:900}
+.mini{width:34px;height:34px;border:2px solid var(--line);border-radius:10px;background:var(--sky);color:var(--ink);font-weight:900;margin-left:4px;cursor:pointer}
+.role{display:flex;gap:14px;align-items:center;cursor:pointer;text-align:left;width:100%;font-family:inherit;color:var(--ink)}
+.role span.e{font-size:38px}
+.chip b{margin-left:4px;color:var(--brand)}
+body #app{background-image:none;box-shadow:0 10px 40px rgba(62,73,89,.18)}
+.card,.btn,.back,.chip.on,.v.sel,.stk{box-shadow:0 4px 14px rgba(62,73,89,.12)}
+.card,.v,.inp,.chip,.back,.bar,.prog span,.tag,.save,.stk,.mini,.step button{border-width:1.5px;border-color:var(--bd)}
+.btn{border-width:1.5px;border-color:var(--ink)}
+.btn:active{transform:translateY(2px);box-shadow:none}
+.btn,.chip,.inp,.step button,.mini{font-family:inherit}
+h1,header b{text-shadow:1px 2px 0 rgba(143,184,222,.5);letter-spacing:.5px}
+body #app{position:relative}
+.ov{position:absolute;inset:0;background:rgba(30,38,50,.45);display:flex;align-items:flex-end;z-index:9}
+.sh{width:100%;max-height:80%;overflow:auto;background:var(--card);border-radius:20px 20px 0 0;padding:18px}
+.sh pre{white-space:pre-wrap;font-family:inherit;font-size:14px;line-height:1.7;margin:12px 0}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}.bar i{transition:none}}
+@media (min-width:500px){#app{height:min(900px,100%);margin:auto;border:3px solid var(--line);border-radius:28px;overflow:hidden;box-shadow:8px 8px 0 var(--line)}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const $=s=>document.querySelector(s);
+const S={step:9,type:'企業團建',custom:'',n:30,bud:800,plan:0,sel:{},resp:0,timer:null,tags:{},pf:{},items:[],pname:''};
+const TYPES=['企業團建','春酒尾牙','生日派對','校友會','社團活動'];
+const STATS=[['不吃牛',.2],['素食',.1],['海鮮過敏',.1],['不喝酒',.35],['想玩互動遊戲',.5]];
+const PLANS=[
+ {name:'暖心餐敘',f:.9,tag:'最省預算',tl:['18:00 入場與迎賓飲','18:30 主餐（含素食、無牛選項）','19:30 輕量破冰：我說你猜','20:15 甜點與合照']},
+ {name:'團建闖關',f:1,tag:'互動最高',tl:['14:00 分組報到','14:30 團隊闖關任務','16:00 主題下午茶','17:00 頒獎與心得分享']},
+ {name:'質感派對',f:1.15,tag:'氛圍最好',tl:['18:00 迎賓調飲（含無酒精）','19:00 自助餐與現場演奏','20:00 抽獎互動','21:00 攝影合照散場']}];
+const MODS=[['場地',.30,['光合包廂','木質空間','城市頂樓']],['外燴餐點',.45,['小森外燴','阿珍私廚','饗食工坊']],['音響設備',.10,['聲浪租賃','小喇叭','好聲音']],['攝影主持',.15,['留影工作室','阿宏主持','一刻攝影']]];
+const F=[.92,1,1.12];
+const money=x=>'NT$ '+Math.round(x).toLocaleString();
+const logo=`<svg width="30" height="30" viewBox="0 0 48 48" aria-hidden="true"><rect x="3" y="9" width="28" height="28" rx="5" fill="none" stroke="#3E4959" stroke-width="3.5"/><path d="M10 6v6M24 6v6" stroke="#3E4959" stroke-width="3.5" stroke-linecap="round"/><rect x="9" y="19" width="5" height="4" fill="#A9B8DA"/><rect x="17" y="19" width="5" height="4" fill="#A9B8DA"/><rect x="9" y="27" width="5" height="4" fill="#A9B8DA"/><path d="M33 17L20 33l13-4z" fill="#8FB8DE" stroke="#3E4959" stroke-width="2.5" stroke-linejoin="round"/><path d="M34 14l7-6M34 14l7 8" stroke="#3E4959" stroke-width="2.5"/><circle cx="34" cy="14" r="3.5" fill="#8FB8DE" stroke="#3E4959" stroke-width="2.5"/><circle cx="42" cy="8" r="3" fill="#8FB8DE" stroke="#3E4959" stroke-width="2.5"/><circle cx="42" cy="22" r="3" fill="#8FB8DE" stroke="#3E4959" stroke-width="2.5"/></svg>`;
+const total=()=>S.n*S.bud*PLANS[S.plan].f;
+function go(s){clearInterval(S.timer);if(s<=6)S.mx=Math.max(S.mx||0,s);S.step=s;render()}
+function render(){
+ const s=S.step;
+ const head=`<header>${BK[s]!==undefined?'<button class="back" aria-label="返回" onclick="go('+BK[s]+')">‹</button>':''}${logo}<b>DON<i>'</i>T 隨便</b></header>`;
+ const prog=s>=1&&s<=5?`<div class="prog">${[1,2,3,4,5].map(i=>`<span class="${i<=s?'on':''}"></span>`).join('')}</div>`:'';
+ $('#app').innerHTML=head+prog+'<main>'+V[s]()+'</main>';
+ if(s===2)animate();
+ if(s===3)setTimeout(()=>{if(S.step===3){S.gen=1;render()}},2200);
+}
+const V=[
+// 0 首頁
+()=>`<h1>告別隨便，<br>享受方便。</h1><p class="sub">3 分鐘生成企劃，辦一場每個人都真心喜歡的活動。</p>
+<button class="btn" onclick="go(1)">開始辦活動</button>
+<h2>我的活動</h2>
+<div class="card"><div class="row"><b>Q3 部門聚餐</b><span class="tag">已完成</span></div><p class="sub">28 人・滿意度 4.8／5</p></div>
+<div class="card"><div class="row"><b>新人迎新</b><span class="tag">已完成</span></div><p class="sub">15 人・省下 NT$ 6,200</p></div>`,
+// 1 活動設定
+()=>`<h1>辦什麼活動？</h1><p class="sub">三個問題，30 秒完成。</p>
+<h2>活動類型</h2><div class="chips">${TYPES.map(t=>`<button class="chip ${S.type===t?'on':''}" onclick="S.type='${t}';S.custom='';render()">${t}</button>`).join('')}</div><input class="inp" placeholder="或自行填寫，例如：新品發表會" value="${esc(S.custom)}" oninput="S.custom=this.value;if(this.value)S.type=this.value">
+<h2>參加人數</h2><div class="card row"><div class="step"><button aria-label="減少" onclick="S.n=Math.max(5,S.n-5);render()">−</button><span class="big">${S.n}</span><button aria-label="增加" onclick="S.n=Math.min(100,S.n+5);render()">＋</button></div><span class="sub">人</span></div>
+<h2>每人預算：<span style="color:var(--brand)">${money(S.bud)}</span></h2><div class="card"><input type="range" min="300" max="2000" step="50" value="${S.bud}" oninput="S.bud=+this.value;this.parentNode.previousElementSibling.lastChild.textContent=money(S.bud)"><div class="row sub"><span>300</span><span>2,000</span></div></div>
+${schedHTML()}<button class="btn" onclick="go(2)">下一步：邀請大家</button>`,
+// 2 探詢
+()=>`<h1>不再「都隨便」</h1><p class="sub">把連結丟進群組，AI 用聊天幫大家說出真心話，30 秒就能回覆。</p>
+<div class="card"><div class="row"><b>已回覆</b><b><span id="rc">0</span> / ${S.n}</b></div><div class="bar"><i id="rb"></i></div>
+<div style="margin-top:12px"><span class="av">小</span><span class="av">美</span><span class="av">阿</span><span class="av">凱</span><span class="av">+</span></div></div>
+<div class="card" style="background:var(--hl)"><b>💬 AI 問：</b> <span class="sub" style="color:inherit">「下班想吃熱的還是涼的？有沒有什麼吃不了的？」</span></div>
+<h2>群體偏好畫像</h2><div class="card">${STATS.map((x,i)=>`<div style="margin-bottom:10px"><div class="row" style="font-size:14px"><span>${x[0]}</span><b id="n${i}">0 人</b></div><div class="bar"><i id="b${i}"></i></div></div>`).join('')}</div>
+<button class="btn" onclick="go(3)">產生活動企劃</button>`,
+// 3 企劃
+()=>!S.gen?`<div class="center"><div class="spin"></div><h1>AI 正在規劃…</h1><p class="sub">依預算、人數與大家的忌口配對中</p></div>`:
+`<h1>為你準備 3 套企劃</h1><p class="sub">全部避開牛肉與海鮮，並加入無酒精選項。</p>
+${PLANS.map((p,i)=>`<div class="card opt ${S.plan===i?'sel':''}" onclick="S.plan=${i};render()"><div class="row"><b style="font-size:18px">${p.name}</b><span class="tag">${p.tag}</span></div>
+<div style="font-size:22px;font-weight:900;margin:4px 0">${money(S.bud*p.f)} <small style="font-size:13px;font-weight:500">／人</small></div>
+${S.plan===i?'<div class="tl">'+p.tl.map(t=>`<div>${t}</div>`).join('')+'</div>':'<p class="sub">點開查看流程</p>'}</div>`).join('')}
+<button class="btn" onclick="S.gen=0;S.sel={};go(4)">選這套，開始詢價</button>`,
+// 4 比價
+()=>{const T=total();let sum=0,avg=0;
+ const mods=MODS.map((m,mi)=>{const base=T*m[1];const best=0;const pick=S.sel[mi]??0;sum+=base*F[pick];avg+=base;
+ return `<h2>${m[0]}</h2>${m[2].map((v,vi)=>`<div class="v ${pick===vi?'sel':''}" onclick="S.sel[${mi}]=${vi};render()"><div>${v}<small>${vi===0?'24 小時內已報價・評價 4.9':'已報價・評價 '+(4.8-vi*.2).toFixed(1)}</small></div><div style="text-align:right"><b>${money(base*F[vi])}</b>${vi===0?'<br><span class="tag">最划算</span>':''}</div></div>`).join('')}`}).join('');
+ const saved=Math.max(0,Math.round((1-sum/avg)*100));
+ return `<h1>報價已收齊</h1><p class="sub">AI 已向 ${MODS.length*3} 家廠商詢價，點選可更換。</p>${mods}
+ <div class="card"><div class="row"><span>合計（${S.n} 人）</span><b style="font-size:22px">${money(sum)}</b></div><div class="save">比市場均價省 ${saved}%・約 ${money(avg-sum)}</div></div>
+ <button class="btn" onclick="S.final=${Math.round(sum)};go(5)">確認並簽約</button>`},
+// 5 簽約
+()=>`<h1>最後確認</h1><p class="sub">${PLANS[S.plan].name}・${S.type}・${S.n} 人</p>
+<div class="card"><div class="row"><span>電子合約</span><span class="tag">待簽署</span></div><hr style="border:1.5px dashed var(--line);margin:12px 0"><div class="row"><span>款項託管（活動後才撥款）</span><b>${money(S.final)}</b></div></div>
+<div class="card"><b>當天提醒</b><p class="sub">AI 會在前一天與當天提醒你，並通知廠商準時到位。</p></div>
+<button class="btn" onclick="go(6)">簽署並付款託管</button>`,
+// 6 完成
+()=>`<div class="center" style="padding-top:50px"><span class="stk">✓</span><h1 style="margin-top:20px">搞定了！</h1><p class="sub">每個人的忌口都顧到了。<br>你只要準備好享受活動。</p></div>
+<div class="card"><div class="row"><b>${PLANS[S.plan].name}</b><span class="tag">已確認</span></div><p class="sub">${S.n} 人・${money(S.final)}・已託管</p></div>
+<button class="btn alt" onclick="S.step=0;S.gen=0;S.resp=0;render()">回首頁</button>`];
+function animate(){S.resp=0;const t=S.timer=setInterval(()=>{S.resp=Math.min(S.n,S.resp+Math.ceil(S.n/12));
+ const r=$('#rc');if(!r){clearInterval(t);return}
+ r.textContent=S.resp;$('#rb').style.width=S.resp/S.n*100+'%';
+ STATS.forEach((x,i)=>{const c=Math.round(S.resp*x[1]);$('#n'+i).textContent=c+' 人';$('#b'+i).style.width=x[1]*100+'%'});
+ if(S.resp>=S.n)clearInterval(t)},180)}
+const BK={0:9,1:0,2:1,3:2,4:10,5:4,7:9,10:3};
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const TAGS=[['不吃牛',.2,0],['素食',.1,0],['海鮮過敏',.1,0],['不吃辣',.17,0],['不喝酒',.33,0],['互動遊戲',.5,1],['輕鬆聊天',.4,1],['表演節目',.2,1],['拍照打卡',.27,1],['抽獎',.45,1],['美食為主',.55,1]];
+const sel=g=>TAGS.filter((t,i)=>S.tags[i]&&(g===undefined||t[2]===g)).map(t=>t[0]);
+function tg(i){S.tags[i]=!S.tags[i];$('#t'+i).classList.toggle('on',!!S.tags[i])}
+function tp(n,el){S.pf[n]=!S.pf[n];el.classList.toggle('on',!!S.pf[n])}
+function animate(){S.resp=0;const t=S.timer=setInterval(()=>{S.resp=Math.min(S.n,S.resp+Math.ceil(S.n/12));const r=$('#rc');if(!r){clearInterval(t);return}r.textContent=S.resp;$('#rb').style.width=S.resp/S.n*100+'%';TAGS.forEach((x,i)=>{$('#n'+i).textContent=Math.round(S.resp*x[1])});if(S.resp>=S.n)clearInterval(t)},180)}
+function openEd(){const p=PLANS[S.plan];S.pname=p.name;S.items=p.tl.map(x=>({time:x.slice(0,5),txt:x.slice(6),note:''}));sel(1).forEach(n=>{if(!S.items.some(it=>it.txt.includes(n)))S.items.splice(S.items.length-1,0,{time:'',txt:n,note:'依你選的標籤加入'})});go(10)}
+function mv(i,d){const j=i+d;if(j<0||j>=S.items.length)return;[S.items[i],S.items[j]]=[S.items[j],S.items[i]];render()}
+function dl(i){S.items.splice(i,1);render()}
+const grp=(g)=>TAGS.map((t,i)=>t[2]===g?`<button class="chip ${S.tags[i]?'on':''}" id="t${i}" onclick="tg(${i})">${t[0]}<b><span id="n${i}">0</span>人</b></button>`:'').join('');
+V[9]=()=>`<div style="text-align:center;padding-top:30px"><svg width="72" height="72" viewBox="0 0 48 48"><use href="#"/></svg></div>`;
+V[9]=()=>`<h1 style="margin-top:30px">你是哪一位？</h1><p class="sub">選擇身分，開始使用 Don't 隨便。</p><div class="card"><button class="role" style="background:none;border:0" onclick="go(0)"><span class="e">🎯</span><span><b style="font-size:20px">主辦方</b><br><span class="sub">我要辦活動，統計大家的偏好並規劃</span></span></button></div><div class="card"><button class="role" style="background:none;border:0" onclick="go(7)"><span class="e">🙋</span><span><b style="font-size:20px">參與者</b><br><span class="sub">我收到邀請，30 秒說出真心話</span></span></button></div>`;
+V[2]=()=>`<h1>不再「都隨便」</h1><p class="sub">把連結丟進群組，大家 30 秒就能回覆。</p><div class="card"><div class="row"><b>已回覆</b><b><span id="rc">0</span> / ${S.n}</b></div><div class="bar"><i id="rb"></i></div></div><h2>群體偏好標籤</h2><p class="sub">數字是人數，點選要納入企劃的標籤。</p><h2 style="font-size:15px">需要照顧的忌口</h2><div class="chips">${grp(0)}</div><h2 style="font-size:15px">大家想要的活動</h2><div class="chips">${grp(1)}</div><button class="btn" onclick="S.gen=0;go(3)">AI 規劃</button>`;
+V[3]=()=>!S.gen?`<div class="center"><div class="spin"></div><h1>AI 正在規劃…</h1><p class="sub">依標籤、預算與人數配對中</p></div>`:`<h1>為你準備 3 套企劃</h1><p class="sub">已納入：${sel().join('、')||'AI 推薦組合'}</p>${PLANS.map((p,i)=>`<div class="card opt ${S.plan===i?'sel':''}" onclick="S.plan=${i};render()"><div class="row"><b style="font-size:18px">${p.name}</b><span class="tag">${p.tag}</span></div><div style="font-size:22px;font-weight:900;margin:4px 0">${money(S.bud*p.f)} <small style="font-size:13px;font-weight:500">／人</small></div>${S.plan===i?'<div class="tl">'+p.tl.map(t=>`<div>${t}</div>`).join('')+'</div>':'<p class="sub">點開預覽流程</p>'}</div>`).join('')}<button class="btn" onclick="openEd()">查看與編輯流程</button>`;
+V[10]=()=>`<h1>流程詳細編輯</h1><p class="sub">直接修改內容，確認後進入詢價。</p><div class="card"><input class="inp" style="margin:0;font-weight:900;font-size:18px" value="${esc(S.pname)}" oninput="S.pname=this.value"><p class="sub" style="margin:8px 0">${esc(S.type)}・${S.n} 人・${money(S.bud*PLANS[S.plan].f)}／人</p><div class="chips">${sel(0).map(n=>`<span class="tag">避開：${n}</span>`).join('')}${sel(1).map(n=>`<span class="tag">納入：${n}</span>`).join('')}</div></div>${S.items.map((it,i)=>`<div class="card"><div class="row"><input class="inp tm" placeholder="時間" value="${esc(it.time)}" oninput="S.items[${i}].time=this.value"><div><button class="mini" aria-label="上移" onclick="mv(${i},-1)">▲</button><button class="mini" aria-label="下移" onclick="mv(${i},1)">▼</button><button class="mini" aria-label="刪除" onclick="dl(${i})">✕</button></div></div><input class="inp" style="font-weight:700" placeholder="環節名稱" value="${esc(it.txt)}" oninput="S.items[${i}].txt=this.value"><input class="inp" placeholder="備註（選填）" value="${esc(it.note)}" oninput="S.items[${i}].note=this.value"></div>`).join('')}<button class="btn alt" onclick="S.items.push({time:'',txt:'',note:''});render()">＋ 新增環節</button><button class="btn" onclick="S.sel={};go(4)">確認流程，開始詢價</button>`;
+const PCH=(arr)=>arr.map(n=>`<button class="chip ${S.pf[n]?'on':''}" onclick="tp('${n}',this)">${n}</button>`).join('');
+V[7]=()=>`<div class="card" style="background:var(--hl)"><b>小美邀請你參加</b><div style="font-size:20px;font-weight:900;margin-top:4px">公司春酒・${S.n} 人</div></div><h1>說出你的真心話</h1><p class="sub">不用再說「都隨便」，點幾下就好。</p><h2>有什麼吃不了的？</h2>${PCHX('f',['不吃牛','素食','海鮮過敏','不吃辣','不喝酒','都可以'],['不吃蛋奶','堅果過敏','不吃內臟','不吃香菜'])}<h2>期待的活動</h2>${PCHX('a',['互動遊戲','輕鬆聊天','表演節目','拍照打卡','抽獎','美食為主'],['KTV 唱歌','桌遊','戶外走走','手作體驗'])}${pSched()}<div id="qs">${qsHTML()}</div><h2>其他想說的</h2><input class="inp" style="margin-top:0" placeholder="例如：希望可以早點結束"><button class="btn" onclick="go(8)">送出回覆</button>`;
+V[8]=()=>`<div class="center" style="padding-top:50px"><span class="stk">✓</span><h1 style="margin-top:20px">收到了，謝謝！</h1><p class="sub">主辦人會依大家的偏好規劃，<br>你的意見不會被「隨便」帶過。</p></div><button class="btn alt" onclick="S.pf={};go(9)">回到選擇身分</button>`;
+BK[11]=0;
+const IC={host:`<svg width="48" height="48" viewBox="0 0 48 48" style="color:var(--ink)" aria-hidden="true"><rect x="6" y="9" width="36" height="32" rx="6" fill="#CFDDEE" stroke="currentColor" stroke-width="3"/><path d="M15 5v8M33 5v8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M16 26l6 6 11-12" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,guest:`<svg width="48" height="48" viewBox="0 0 48 48" style="color:var(--ink)" aria-hidden="true"><circle cx="21" cy="21" r="8" fill="#CFDDEE" stroke="currentColor" stroke-width="3"/><path d="M7 43c0-9 6-14 14-14s14 5 14 14z" fill="#8FB8DE" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M31 5h12a3 3 0 013 3v7a3 3 0 01-3 3h-5l-4 4v-4h-3a3 3 0 01-3-3V8a3 3 0 013-3z" fill="var(--card)" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="35" cy="11.5" r="1.4" fill="currentColor"/><circle cx="39.5" cy="11.5" r="1.4" fill="currentColor"/></svg>`};
+V[9]=()=>`<h1 style="margin-top:30px">你是哪一位？</h1><p class="sub">選擇身分，開始使用 DON'T 隨便。</p><div class="card"><button class="role" style="background:none;border:0" onclick="go(0)"><span class="e">${IC.host}</span><span><b style="font-size:20px">主辦方</b><br><span class="sub">我要辦活動，統計大家的偏好並規劃</span></span></button></div><div class="card"><button class="role" style="background:none;border:0" onclick="go(7)"><span class="e">${IC.guest}</span><span><b style="font-size:20px">參與者</b><br><span class="sub">我收到邀請，30 秒說出真心話</span></span></button></div>`;
+const PAST=[
+{n:'Q3 部門聚餐',type:'部門聚餐',date:'2026/09/18',p:28,score:'4.8',total:'NT$ 22,400',saved:'NT$ 3,900',plan:'暖心餐敘',tl:['18:00 入場與迎賓飲','18:30 主餐（含素食、無牛選項）','19:30 輕量破冰：我說你猜','20:15 甜點與合照'],v:[['場地','光合包廂'],['外燴餐點','小森外燴'],['音響設備','聲浪租賃'],['攝影主持','留影工作室']],tags:['不吃牛','素食','輕鬆聊天']},
+{n:'新人迎新',type:'企業團建',date:'2026/08/07',p:15,score:'4.7',total:'NT$ 13,500',saved:'NT$ 6,200',plan:'團建闖關',tl:['14:00 分組報到','14:30 團隊闖關任務','16:00 主題下午茶','17:00 頒獎與心得分享'],v:[['場地','木質空間'],['外燴餐點','阿珍私廚'],['音響設備','小喇叭'],['攝影主持','阿宏主持']],tags:['海鮮過敏','互動遊戲','抽獎']}];
+V[0]=()=>`<h1>告別隨便，<br>享受方便。</h1><p class="sub">3 分鐘生成企劃，辦一場每個人都真心喜歡的活動。</p><button class="btn" onclick="go(1)">開始辦活動</button><h2>我的活動</h2>${PAST.map((e,i)=>`<div class="card opt" onclick="S.past=${i};go(11)"><div class="row"><b>${e.n}</b><span class="tag">已完成</span></div><div class="row"><p class="sub">${e.p} 人・滿意度 ${e.score}／5・省下 ${e.saved}</p><b>›</b></div></div>`).join('')}`;
+V[11]=()=>{const e=PAST[S.past||0];return `<h1>${e.n}</h1><span class="tag">已完成</span><div class="card">${[['日期',e.date],['類型',e.type],['人數',e.p+' 人'],['方案',e.plan],['總花費',e.total],['省下',e.saved],['滿意度',e.score+' / 5']].map(r=>`<div class="row" style="padding:5px 0"><span class="sub">${r[0]}</span><b>${r[1]}</b></div>`).join('')}</div><h2>當時的流程</h2><div class="card"><div class="tl">${e.tl.map(t=>`<div>${t}</div>`).join('')}</div></div><h2>合作廠商</h2><div class="card">${e.v.map(r=>`<div class="row" style="padding:5px 0"><span class="sub">${r[0]}</span><b>${r[1]}</b></div>`).join('')}</div><h2>大家的偏好</h2><div class="chips">${e.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div><button class="btn" onclick="S.type='${e.type}';S.custom='';S.n=${e.p};go(1)">用這場再辦一次</button>`};
+S.ext={};
+function grpHTML(k){const g=S.ext[k];const list=g.base.concat(g.open?g.more:g.more.filter(n=>S.pf[n]),g.custom);return list.map(n=>`<button class="chip ${S.pf[n]?'on':''}" data-n="${esc(n)}" onclick="tp(this.dataset.n,this)">${esc(n)}</button>`).join('')+`${g.more.length?`<button class="chip ${g.open?'on':''}" aria-label="更多選項" onclick="S.ext['${k}'].open=!S.ext['${k}'].open;rg('${k}')">…</button>`:''}<button class="chip ${g.add?'on':''}" aria-label="自訂選項" onclick="S.ext['${k}'].add=!S.ext['${k}'].add;rg('${k}')">＋</button>`+(g.add?`<div class="row" style="width:100%;gap:8px"><input class="inp" style="margin:0" id="ci-${k}" placeholder="輸入自訂選項" maxlength="12"><button class="chip on" onclick="addc('${k}')">新增</button></div>`:'')}
+function rg(k){$('#pg-'+k).innerHTML=grpHTML(k);const i=$('#ci-'+k);if(i)i.focus()}
+function addc(k){const v=$('#ci-'+k).value.trim();if(!v)return;const g=S.ext[k];if(!g.custom.includes(v)&&!g.base.concat(g.more).includes(v))g.custom.push(v);S.pf[v]=true;g.add=false;rg(k)}
+function PCHX(k,base,more){S.ext[k]=S.ext[k]||{base,more,custom:[],open:false,add:false};return `<div class="chips" id="pg-${k}">${grpHTML(k)}</div>`}
+S.qs=[{q:'想去哪一區？',by:'阿凱',opts:['市區','近郊','都可以']}];S.qadd=false;
+function qsHTML(){return S.qs.map((x,i)=>`<h2>${esc(x.q)} <span class="tag" style="font-weight:500">${esc(x.by)} 提出</span></h2>${PCHX('q'+i,x.opts,[])}`).join('')+`<button class="chip ${S.qadd?'on':''}" style="margin-top:14px" onclick="S.qadd=!S.qadd;rq()">＋ 新增問題</button>`+(S.qadd?`<div class="card"><input class="inp" style="margin:0" id="qq" placeholder="你想問大家什麼？" maxlength="30"><input class="inp" id="qo" placeholder="選項，用逗號分隔（選填）" maxlength="60"><button class="btn" style="margin-top:12px;padding:11px" onclick="addq()">發布給大家</button></div>`:'')}
+function rq(){$('#qs').innerHTML=qsHTML();const i=$('#qq');if(i)i.focus()}
+function addq(){const q=$('#qq').value.trim();if(!q)return;const o=$('#qo').value.split(/[,，、]/).map(s=>s.trim()).filter(Boolean);S.qs.push({q,by:'我',opts:o.length?o:['好','都可以']});S.qadd=false;rq()}
+Object.assign(S,{dmode:'open',date:'2026-11-20',time:'18:00',cands:['2026-11-20','2026-11-21','2026-11-27'],regions:['台北'],mx:0,ok:false,pay:'',notif:false});
+const DATES=['2026-11-20','2026-11-21','2026-11-27','2026-11-28'],REG=['台北','新北','台中','高雄'],STG=['需求收集','企劃確認','廠商詢價','付款託管','活動籌備','活動當天'];
+const fd=d=>`${+d.slice(5,7)}/${+d.slice(8)}（${'日一二三四五六'[new Date(d+'T00:00').getDay()]}）`;
+const whenTxt=()=>S.dmode==='fixed'?`${fd(S.date)} ${S.time}–${S.end}`:`候選 ${S.cands.filter(c=>c.d).map(cl).join('、')}`;
+function tc(d){S.cands=S.cands.includes(d)?S.cands.filter(x=>x!==d):DATES.filter(x=>S.cands.includes(x)||x===d);if(!S.cands.length)S.cands=[d];render()}
+function tr(r){S.regions=S.regions.includes(r)?S.regions.filter(x=>x!==r):S.regions.concat(r);if(!S.regions.length)S.regions=[r];render()}
+function addR(r){if(!S.regions.includes(r))S.regions.push(r);render()}
+function schedHTML(){return `<h2>日期與時間</h2><div class="chips"><button class="chip ${S.dmode==='fixed'?'on':''}" onclick="S.dmode='fixed';render()">已確定</button><button class="chip ${S.dmode==='open'?'on':''}" onclick="S.dmode='open';render()">還沒定，讓大家選</button></div>`+(S.dmode==='fixed'?`<input class="inp" type="date" value="${S.date}" onchange="S.date=this.value"><input class="inp" type="time" value="${S.time}" onchange="S.time=this.value">`:`<p class="sub" style="margin:8px 0">選出候選日期，參與者會選方便的日期與時段。</p><div class="chips">${DATES.map(d=>`<button class="chip ${S.cands.includes(d)?'on':''}" onclick="tc('${d}')">${fd(d)}</button>`).join('')}</div>`)+`<h2>地區</h2><div class="chips">${REG.concat(S.regions.filter(r=>!REG.includes(r))).map(r=>`<button class="chip ${S.regions.includes(r)?'on':''}" data-n="${esc(r)}" onclick="tr(this.dataset.n)">${esc(r)}</button>`).join('')}</div><input class="inp" placeholder="＋ 其他地區，輸入後按 Enter" onchange="if(this.value.trim())addR(this.value.trim())">`}
+function pSched(){delete S.ext.d;delete S.ext.s;delete S.ext.r;const info=`<div class="card"><div class="row"><span class="sub">${S.dmode==='fixed'?'已確定':'日期'}</span><b>${whenTxt()}</b></div></div>`;if(S.dmode==='fixed')return info+(S.regions.length>1?`<h2>方便的地區</h2>${PCHX('r',S.regions,[])}`:`<p class="sub">地區：${S.regions[0]}</p>`);return `<h2>方便的日期</h2>${PCHX('d',S.cands.map(fd),[])}<h2>方便的時段</h2>${PCHX('s',['平日晚上','週五下午','週末白天','週末晚上'],['平日午餐','平日下午'])}`+(S.regions.length>1?`<h2>方便的地區</h2>${PCHX('r',S.regions,[])}`:`<p class="sub" style="margin-top:10px">地區：${S.regions[0]}</p>`)}
+function dtl(){const T=total();let sum=0;const L=MODS.map((m,i)=>{const k=S.sel[i]??0,p=T*m[1]*F[k];sum+=p;return [m[0],m[2][k],p]});return{L,sum}}
+function items(){return S.items.length?S.items:PLANS[S.plan].tl.map(x=>({time:x.slice(0,5),txt:x.slice(6),note:''}))}
+function FT(){return `<div class="tl">${items().map(it=>`<div><b>${esc(it.time)||'—'}</b> ${esc(it.txt)}${it.note?` <span class="sub">（${esc(it.note)}）</span>`:''}</div>`).join('')}</div>`}
+function PG(){const m=S.mx||0,d=(m>=3)+(m>=4)+(m>=5)+(m>=6);return `<div class="card">${STG.map((n,i)=>`<div class="row" style="padding:7px 0"><span>${i<d?'✅':i===d?'🔵':'⚪'} ${n}</span><span class="sub">${i<d?'已完成':i===d?'進行中':'待進行'}</span></div>`).join('')}</div>`}
+function rp(){$('#pay').innerHTML=payHTML()}
+function payHTML(){if(!S.ok)return `<p class="sub" style="text-align:center;margin-top:12px">勾選確認後，才能選擇付款方式。</p>`;return `<h2>付款方式</h2><div class="chips">${['信用卡','LINE Pay','銀行轉帳'].map(p=>`<button class="chip ${S.pay===p?'on':''}" onclick="S.pay='${p}';rp()">${p}</button>`).join('')}</div><button class="btn" ${S.pay?'':'style="opacity:.45"'} onclick="if(S.pay)go(6)">付款並託管</button>`}
+function gcal(){const d=(S.dmode==='fixed'?S.date:S.cands[0]).replace(/-/g,''),h=+S.time.slice(0,2);const t=S.time.replace(':','')+'00',e=String(h+2).padStart(2,'0')+S.time.slice(3,5)+'00';return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(S.type)}&dates=${d}T${t}/${d}T${e}&details=${encodeURIComponent('Don\'t 隨便 活動')}`}
+function sheet(k){const d=dtl();const L=k==='flow'?[(S.pname||PLANS[S.plan].name)+'｜'+S.type,'日期：'+whenTxt(),'地區：'+S.regions.join('、'),''].concat(items().map(it=>it.time+' '+it.txt+(it.note?'（'+it.note+'）':''))):['費用明細｜'+S.type+'｜'+S.n+' 人',''].concat(d.L.map(l=>l[0]+'・'+l[1]+'　'+money(l[2])),['','合計　'+money(d.sum),'付款：'+(S.pay||'未付款')+'（平台託管）']);const el=document.createElement('div');el.className='ov';el.innerHTML=`<div class="sh"><div class="row"><b>${k==='flow'?'流程表':'明細'}輸出</b><button class="mini" aria-label="關閉" onclick="this.closest('.ov').remove()">✕</button></div><pre id="ex">${esc(L.join('\n'))}</pre><button class="btn" onclick="cp(this)">複製內容</button><p class="sub" style="margin-top:8px">正式版可輸出 PDF／Excel，這裡先以複製示範。</p></div>`;$('#app').appendChild(el)}
+function cp(b){const t=$('#ex').textContent;Promise.resolve().then(()=>navigator.clipboard.writeText(t)).then(()=>{b.textContent='已複製 ✓'},()=>{b.textContent='請長按上方文字複製'})}
+V[5]=()=>{const d=dtl(),r=(a,b)=>`<div class="row" style="margin-top:8px;align-items:flex-start"><span class="sub">${a}</span><b style="text-align:right">${b}</b></div>`;return `<h1>確認單</h1><p class="sub">請逐項確認，確認後才能付款。</p><div class="card">${r('活動',esc(S.type)+'・'+S.n+' 人')}${r('日期',whenTxt())}${r('地區',S.regions.join('、'))}${r('流程',esc(S.pname||PLANS[S.plan].name)+'（'+items().length+' 個環節）')}</div><div class="card"><b>費用明細</b>${d.L.map(l=>`<div class="row" style="margin-top:8px;font-size:14px"><span>${l[0]}・${l[1]}</span><b>${money(l[2])}</b></div>`).join('')}<hr style="border:1.5px dashed var(--bd);margin:12px 0"><div class="row"><b>合計</b><b style="font-size:20px">${money(d.sum)}</b></div><p class="sub" style="margin-top:6px">款項由平台託管，活動結束後才撥給廠商。</p></div><label class="card row" style="cursor:pointer;justify-content:flex-start"><input type="checkbox" ${S.ok?'checked':''} onchange="S.ok=this.checked;rp()" style="width:22px;height:22px;accent-color:var(--ink)"><b>我已確認以上內容無誤</b></label><div id="pay">${payHTML()}</div>`};
+V[6]=()=>`<div style="text-align:center"><span class="stk" style="width:64px;height:64px;font-size:34px">✓</span><h1 style="margin-top:12px">付款完成，已託管</h1><p class="sub">${money(dtl().sum)}・${S.pay}</p></div><h2>確認進度</h2>${PG()}<h2>流程表</h2><div class="card">${FT()}</div><h2>參與者評價</h2><div class="card"><div class="row"><b style="font-size:24px">${S.rv.n?(S.rv.sum/S.rv.n).toFixed(1)+' ★':'尚無評價'}</b><span class="sub">${S.rv.n} 則評價</span></div><p class="sub" style="margin-top:6px">活動結束後，評價會用來優化推薦並累積廠商履約評分。</p></div><div class="row" style="gap:10px"><button class="btn alt" onclick="sheet('flow')">輸出流程表</button><button class="btn alt" onclick="sheet('detail')">輸出明細</button></div><button class="btn" onclick="S.step=0;render()">回首頁</button>`;
+V[8]=()=>`<div style="text-align:center"><span class="stk" style="width:64px;height:64px;font-size:34px">✓</span><h1 style="margin-top:12px">收到了，謝謝！</h1></div><h2>活動資訊</h2><div class="card"><div class="row" style="align-items:flex-start"><span class="sub">日期</span><b style="text-align:right">${whenTxt()}</b></div><div class="row" style="margin-top:8px"><span class="sub">地區</span><b>${S.regions.join('、')}</b></div></div><h2>目前進度</h2>${PG()}<h2>流程表</h2><div class="card">${FT()}</div>${rateCard()}<button class="chip ${S.notif?'on':''}" style="margin-bottom:12px" onclick="S.notif=!S.notif;render()">🔔 活動通知：${S.notif?'已開啟':'關閉'}</button><a class="btn alt" style="text-align:center;text-decoration:none" target="_blank" rel="noopener" href="${gcal()}">📅 加到行事曆${S.dmode==='open'?'（暫定）':''}</a><button class="btn" onclick="S.pf={};go(9)">回到選擇身分</button>`;
+S.end='21:00';S.cands=[{d:'2026-11-20',s:'18:00',e:'21:00'},{d:'2026-11-21',s:'14:00',e:'17:00'}];S.rv={n:0,sum:0};S.rate={};
+const CITIES=['台北','新北','桃園','新竹','台中','台南','高雄'],RK=[['o','整體'],['f','餐點'],['p','流程'],['v','場地']];
+function cl(c){return fd(c.d)+' '+c.s+'–'+c.e}
+function selR(v){S.regions=[v];render()}
+function schedHTML(){const rg=S.regions[0]||'台北',oth=!CITIES.includes(rg);return `<h2>日期與時間</h2><div class="chips"><button class="chip ${S.dmode==='fixed'?'on':''}" onclick="S.dmode='fixed';render()">已確定</button><button class="chip ${S.dmode==='open'?'on':''}" onclick="S.dmode='open';render()">還沒定，讓大家選</button></div>`+(S.dmode==='fixed'?`<input class="inp" type="date" value="${S.date}" onchange="S.date=this.value"><div class="row" style="gap:8px"><input class="inp" type="time" aria-label="開始時間" value="${S.time}" onchange="S.time=this.value"><span>–</span><input class="inp" type="time" aria-label="結束時間" value="${S.end}" onchange="S.end=this.value"></div>`:`<p class="sub" style="margin:8px 0">自行輸入候選時段，參與者會從中選擇。</p>${S.cands.map((c,i)=>`<div class="card"><div class="row"><b>選項 ${i+1}</b>${S.cands.length>1?`<button class="mini" aria-label="刪除" onclick="S.cands.splice(${i},1);render()">✕</button>`:''}</div><input class="inp" type="date" value="${c.d}" onchange="S.cands[${i}].d=this.value"><div class="row" style="gap:8px"><input class="inp" type="time" aria-label="開始時間" value="${c.s}" onchange="S.cands[${i}].s=this.value"><span>–</span><input class="inp" type="time" aria-label="結束時間" value="${c.e}" onchange="S.cands[${i}].e=this.value"></div></div>`).join('')}<button class="chip" onclick="S.cands.push({d:'',s:'18:00',e:'21:00'});render()">＋ 新增選項</button>`)+`<h2>地區</h2><select class="inp" style="margin-top:0" aria-label="地區" onchange="selR(this.value)">${CITIES.map(c=>`<option ${rg===c?'selected':''}>${c}</option>`).join('')}<option value="其他" ${oth?'selected':''}>其他…</option></select>`+(oth?`<input class="inp" placeholder="輸入地區" value="${esc(rg==='其他'?'':rg)}" onchange="S.regions=[this.value.trim()||'其他'];render()">`:'')}
+function pSched(){delete S.ext.d;const fx=S.dmode==='fixed';return `<div class="card"><div class="row" style="align-items:flex-start"><span class="sub">${fx?'時間':'日期'}</span><b style="text-align:right">${fx?whenTxt():'請選擇方便的時段'}</b></div><div class="row" style="margin-top:8px"><span class="sub">地區</span><b>${S.regions.join('、')}</b></div></div>`+(fx?'':`<h2>方便的時段（可複選）</h2>${PCHX('d',S.cands.filter(c=>c.d).map(cl),[])}`)}
+function gcal(){const c=S.dmode==='fixed'?{d:S.date,s:S.time,e:S.end}:(S.cands.find(x=>x.d)||{d:S.date,s:S.time,e:S.end});const f=t=>t.replace(':','')+'00',d=c.d.replace(/-/g,'');return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(S.type)}&dates=${d}T${f(c.s)}/${d}T${f(c.e)}`}
+function rateCard(){return `<h2>活動評價</h2><div class="card">${S.rated?`<b>已送出評價，謝謝你！</b><p class="sub">你給了整體 ${S.rate.o} 星</p>`:`<p class="sub">活動結束後，給主辦方和廠商一個回饋。</p><button class="btn alt" style="margin-top:8px" onclick="rateSheet()">⭐ 評價這場活動</button>`}</div>`}
+function rateSheet(){const el=document.createElement('div');el.className='ov';el.id='rv';$('#app').appendChild(el);drawR()}
+function drawR(){const r=S.rate;$('#rv').innerHTML=`<div class="sh"><div class="row"><b>活動評價</b><button class="mini" aria-label="關閉" onclick="$('#rv').remove()">✕</button></div>${RK.map(k=>`<div class="row" style="margin-top:12px"><span>${k[1]}</span><span>${[1,2,3,4,5].map(n=>`<button class="mini" style="font-size:18px;background:${(r[k[0]]||0)>=n?'var(--hl)':'var(--card)'}" aria-label="${n} 星" onclick="S.rate.${k[0]}=${n};drawR()">${(r[k[0]]||0)>=n?'★':'☆'}</button>`).join('')}</span></div>`).join('')}<input class="inp" placeholder="想對主辦方說的話（選填）" value="${esc(S.rtxt||'')}" oninput="S.rtxt=this.value"><button class="btn" style="opacity:${r.o?1:.45}" onclick="sendR()">送出評價</button></div>`}
+function sendR(){const r=S.rate;if(!r.o)return;S.rv.n++;S.rv.sum+=r.o;S.rated=true;$('#rv').remove();render()}
+render();
+</script>
+</body>
+</html>
